@@ -102,7 +102,7 @@ export default function BookingModal({ isOpen, onClose, car, onBookingSuccess })
                 </div>
 
                 {/* Modal Form */}
-                <form onSubmit={handleSubmit} className="p-6 space-y-5">
+                <form onSubmit={handleSubmit} className="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
                     <div className="grid grid-cols-2 gap-4">
                         {/* Start Date */}
                         <div className="space-y-1">
