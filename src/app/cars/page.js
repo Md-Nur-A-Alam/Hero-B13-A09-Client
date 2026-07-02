@@ -100,9 +100,9 @@ export default function ExploreCarsPage() {
                                 onChange={(e) => setType(e.target.value)}
                                 className="w-full pl-9 pr-8 py-2.5 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 dark:focus:border-indigo-500 text-sm transition-all appearance-none cursor-pointer"
                             >
-                                <option value="">All Types</option>
+                                <option value="" className="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-150">All Types</option>
                                 {carTypes.map((t) => (
-                                    <option key={t} value={t}>{t}</option>
+                                    <option key={t} value={t} className="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-150">{t}</option>
                                 ))}
                             </select>
                             <span className="absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-400 pointer-events-none text-[10px]">

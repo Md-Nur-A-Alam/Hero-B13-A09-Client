@@ -89,7 +89,7 @@ export default function UpdateCarModal({ isOpen, onClose, car, onUpdateSuccess }
                             className="w-full px-4 py-2.5 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm cursor-pointer"
                         >
                             {carTypes.map((t) => (
-                                <option key={t} value={t}>{t}</option>
+                                <option key={t} value={t} className="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-150">{t}</option>
                             ))}
                         </select>
                     </div>
