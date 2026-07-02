@@ -44,6 +44,9 @@ export default function Navbar() {
                         </Link>
                         {user && (
                             <>
+                                <Link href="/dashboard" className={navLink("/dashboard")}>
+                                    Dashboard
+                                </Link>
                                 <Link href="/add-car" className={navLink("/add-car")}>
                                     Add Car
                                 </Link>
@@ -90,6 +93,21 @@ export default function Navbar() {
 
                                 {dropdownOpen && (
                                     <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-zinc-950 border border-zinc-200/50 dark:border-zinc-800/50 rounded-xl shadow-xl py-1 z-50 transition-all">
+                                        <Link
+                                            href="/profile"
+                                            onClick={() => setDropdownOpen(false)}
+                                            className="flex items-center gap-2 px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900"
+                                        >
+                                            <User size={15} /> My Profile
+                                        </Link>
+                                        <Link
+                                            href="/dashboard"
+                                            onClick={() => setDropdownOpen(false)}
+                                            className="flex items-center gap-2 px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900"
+                                        >
+                                            <Car size={15} /> Dashboard
+                                        </Link>
+                                        <hr className="border-zinc-200 dark:border-zinc-800 my-1" />
                                         <Link
                                             href="/add-car"
                                             onClick={() => setDropdownOpen(false)}
@@ -172,6 +190,21 @@ export default function Navbar() {
                     </Link>
                     {user ? (
                         <>
+                            <Link
+                                href="/profile"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="block px-3 py-2 rounded-lg text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900 font-medium"
+                            >
+                                My Profile
+                            </Link>
+                            <Link
+                                href="/dashboard"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="block px-3 py-2 rounded-lg text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900 font-medium"
+                            >
+                                Dashboard
+                            </Link>
+                            <hr className="border-zinc-200 dark:border-zinc-800" />
                             <Link
                                 href="/add-car"
                                 onClick={() => setMobileMenuOpen(false)}

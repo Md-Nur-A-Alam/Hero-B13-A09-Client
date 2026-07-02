@@ -102,8 +102,28 @@ export function AuthProvider({ children }) {
         }
     };
 
+    const updateProfile = async (name, photoUrl) => {
+        setLoading(true);
+        try {
+            const data = await apiFetch("/api/users/profile", {
+                method: "PUT",
+                body: { name, photoUrl }
+            });
+            if (data.success && data.user) {
+                setUser(data.user);
+                return { success: true, user: data.user };
+            }
+            return data;
+        } catch (err) {
+            console.error("Profile update failed:", err);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ user, loading, register, login, googleLogin, logout }}>
+        <AuthContext.Provider value={{ user, loading, register, login, googleLogin, logout, updateProfile }}>
             {children}
         </AuthContext.Provider>
     );
