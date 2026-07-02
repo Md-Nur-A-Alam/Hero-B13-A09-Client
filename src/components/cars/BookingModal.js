@@ -16,6 +16,8 @@ export default function BookingModal({ isOpen, onClose, car, onBookingSuccess })
     const [totalPrice, setTotalPrice] = useState(0);
 
     // Live total price calculation
+    const todayStr = new Date().toISOString().split("T")[0];
+
     useEffect(() => {
         if (startDate && endDate) {
             const start = new Date(startDate);
@@ -114,6 +116,7 @@ export default function BookingModal({ isOpen, onClose, car, onBookingSuccess })
                                 <input
                                     type="date"
                                     required
+                                    min={todayStr}
                                     value={startDate}
                                     onChange={(e) => setStartDate(e.target.value)}
                                     className="w-full pl-9 pr-3 py-2.5 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 dark:focus:border-indigo-500 text-sm"
@@ -133,6 +136,7 @@ export default function BookingModal({ isOpen, onClose, car, onBookingSuccess })
                                 <input
                                     type="date"
                                     required
+                                    min={startDate || todayStr}
                                     value={endDate}
                                     onChange={(e) => setEndDate(e.target.value)}
                                     className="w-full pl-9 pr-3 py-2.5 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 dark:focus:border-indigo-500 text-sm"

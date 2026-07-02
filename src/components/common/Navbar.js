@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import useAuth from "../../hooks/useAuth";
 import useTheme from "../../hooks/useTheme";
 import { Menu, X, Sun, Moon, LogOut, User, Car, Calendar, ChevronDown } from "lucide-react";
@@ -9,8 +10,16 @@ import { Menu, X, Sun, Moon, LogOut, User, Car, Calendar, ChevronDown } from "lu
 export default function Navbar() {
     const { user, logout } = useAuth();
     const { theme, toggleTheme } = useTheme();
+    const pathname = usePathname();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+
+    const navLink = (href) =>
+        `text-sm font-medium transition-colors ${
+            pathname === href
+                ? "text-indigo-600 dark:text-indigo-400 font-bold"
+                : "text-zinc-600 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400"
+        }`;
 
     return (
         <nav className="sticky top-0 z-50 w-full bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-zinc-200/50 dark:border-zinc-800/50 transition-colors duration-300">
@@ -27,18 +36,18 @@ export default function Navbar() {
 
                     {/* Desktop Menu */}
                     <div className="hidden md:flex items-center space-x-6">
-                        <Link href="/" className="text-zinc-600 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors">
+                        <Link href="/" className={navLink("/")}>
                             Home
                         </Link>
-                        <Link href="/cars" className="text-zinc-600 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors">
+                        <Link href="/cars" className={navLink("/cars")}>
                             Explore Cars
                         </Link>
                         {user && (
                             <>
-                                <Link href="/add-car" className="text-zinc-600 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors">
+                                <Link href="/add-car" className={navLink("/add-car")}>
                                     Add Car
                                 </Link>
-                                <Link href="/my-bookings" className="text-zinc-600 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors">
+                                <Link href="/my-bookings" className={navLink("/my-bookings")}>
                                     My Bookings
                                 </Link>
                             </>

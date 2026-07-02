@@ -87,3 +87,23 @@ export async function fetchMyBookings() {
         throw error;
     }
 }
+
+export async function cancelBooking(id) {
+    try {
+        return await apiFetch(`/api/bookings/${id}`, {
+            method: "DELETE"
+        });
+    } catch (error) {
+        console.error(`Error cancelling booking ${id}:`, error);
+        throw error;
+    }
+}
+
+export async function fetchStats() {
+    try {
+        return await apiFetch("/api/stats");
+    } catch (error) {
+        console.error("Error fetching stats:", error);
+        throw error;
+    }
+}

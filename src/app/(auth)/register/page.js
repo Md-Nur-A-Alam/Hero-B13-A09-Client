@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import useAuth from "../../../hooks/useAuth";
 import toast from "react-hot-toast";
 import { User, Mail, Link2, Lock, UserPlus, ArrowRight } from "lucide-react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 export default function RegisterPage() {
     const { register, googleLogin, loading } = useAuth();

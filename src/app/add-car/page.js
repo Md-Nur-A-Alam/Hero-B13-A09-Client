@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createCarListing } from "../actions/carActions";
-import useAuth from "../hooks/useAuth";
+import { createCarListing } from "../../actions/carActions";
+import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import { PlusCircle, Info, MapPin, DollarSign, Image, Users, Layers } from "lucide-react";
 import { motion } from "framer-motion";

@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchMyCars, deleteCarListing } from "../actions/carActions";
-import Spinner from "../components/common/Spinner";
-import UpdateCarModal from "../components/cars/UpdateCarModal";
-import DeleteConfirmModal from "../components/cars/DeleteConfirmModal";
-import useAuth from "../hooks/useAuth";
+import { fetchMyCars, deleteCarListing } from "../../actions/carActions";
+import Spinner from "../../components/common/Spinner";
+import UpdateCarModal from "../../components/cars/UpdateCarModal";
+import DeleteConfirmModal from "../../components/cars/DeleteConfirmModal";
+import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import Link from "next/link";
-import { Trash2, Edit, MapPin, DollarSign, Tag, Users } from "lucide-react";
+import { Trash2, Edit, MapPin, DollarSign, Tag, Users, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function MyCarsPage() {
@@ -55,7 +55,7 @@ export default function MyCarsPage() {
     };
 
     if (authLoading || loading) {
-        return <Spinner />;
+        return <Spinner fullPage />;
     }
 
     return (
@@ -138,6 +138,10 @@ export default function MyCarsPage() {
                                         <div className="flex items-center gap-1.5">
                                             <Users size={14} className="text-zinc-400" />
                                             <span>{car.seatCapacity} Seats</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <BookOpen size={14} className="text-zinc-400" />
+                                            <span>{car.bookingCount || 0} Bookings received</span>
                                         </div>
                                     </div>
 
