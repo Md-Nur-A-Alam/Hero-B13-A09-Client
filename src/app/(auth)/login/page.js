@@ -1,57 +1,30 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import useAuth from "../../../hooks/useAuth";
 import toast from "react-hot-toast";
 import { Mail, Lock, LogIn, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+
 export default function LoginPage() {
     const { login, googleLogin, loading } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    useEffect(() => {
-        // Initialize Google Sign-In
-        const initGoogle = () => {
-            if (typeof window !== "undefined" && window.google) {
-                try {
-                    window.google.accounts.id.initialize({
-                        client_id: "759718894379-bm4ph319iktfqj36e1f54q2790dmbjlj.apps.googleusercontent.com",
-                        callback: handleGoogleCredentialResponse
-                    });
-                    
-                    const btn = document.getElementById("google-signin-btn");
-                    if (btn) {
-                        window.google.accounts.id.renderButton(btn, {
-                            theme: "outline",
-                            size: "large",
-                            width: "100%",
-                            shape: "circle",
-                            text: "signin_with"
-                        });
-                    }
-                } catch (e) {
-                    console.error("Google script initialization failed", e);
-                }
-            }
-        };
-
-        // Retry if script loads slowly
-        const timer = setTimeout(initGoogle, 500);
-        return () => clearTimeout(timer);
-    }, []);
-
-    const handleGoogleCredentialResponse = async (response) => {
+    const handleGoogleCredentialResponse = useCallback(async (response) => {
         try {
-            const tokenParts = response.credential.split('.');
-            const payload = JSON.parse(atob(tokenParts[1].replace(/-/g, '+').replace(/_/g, '/')));
-            
+            const tokenParts = response.credential.split(".");
+            const payload = JSON.parse(
+                atob(tokenParts[1].replace(/-/g, "+").replace(/_/g, "/"))
+            );
+
             const profile = {
                 name: payload.name,
                 email: payload.email,
-                photoUrl: payload.picture
+                photoUrl: payload.picture,
             };
 
             await googleLogin(profile);
@@ -60,11 +33,59 @@ export default function LoginPage() {
             console.error("Google Sign-In Error:", err);
             toast.error(err.message || "Google Sign-In failed");
         }
-    };
+    }, [googleLogin]);
+
+    useEffect(() => {
+        if (!GOOGLE_CLIENT_ID) {
+            console.warn("NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set");
+            return;
+        }
+
+        let attempts = 0;
+        const maxAttempts = 20; // try for up to 10 seconds
+
+        const tryInitGoogle = () => {
+            if (typeof window !== "undefined" && window.google?.accounts?.id) {
+                try {
+                    window.google.accounts.id.initialize({
+                        client_id: GOOGLE_CLIENT_ID,
+                        callback: handleGoogleCredentialResponse,
+                    });
+
+                    const btn = document.getElementById("google-signin-btn");
+                    if (btn) {
+                        window.google.accounts.id.renderButton(btn, {
+                            theme: "outline",
+                            size: "large",
+                            width: btn.offsetWidth || 320,
+                            shape: "pill",
+                            text: "signin_with",
+                            logo_alignment: "center",
+                        });
+                    }
+                } catch (e) {
+                    console.error("Google SDK initialization failed:", e);
+                }
+                return true; // done
+            }
+            return false;
+        };
+
+        // Try immediately first, then poll every 500ms
+        if (!tryInitGoogle()) {
+            const interval = setInterval(() => {
+                attempts++;
+                if (tryInitGoogle() || attempts >= maxAttempts) {
+                    clearInterval(interval);
+                }
+            }, 500);
+            return () => clearInterval(interval);
+        }
+    }, [handleGoogleCredentialResponse]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!email || !password) {
             return toast.error("Please fill in all fields.");
         }
@@ -142,7 +163,9 @@ export default function LoginPage() {
                         disabled={loading}
                         className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-md shadow-indigo-500/10 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {loading ? "Signing in..." : (
+                        {loading ? (
+                            "Signing in..."
+                        ) : (
                             <>
                                 <LogIn size={18} /> Sign In
                             </>
@@ -158,14 +181,23 @@ export default function LoginPage() {
                 </div>
 
                 {/* Google Sign-in Button */}
-                <div className="flex justify-center">
-                    <div id="google-signin-btn" className="w-full"></div>
+                <div className="flex justify-center min-h-[44px]">
+                    {GOOGLE_CLIENT_ID ? (
+                        <div id="google-signin-btn" className="w-full" />
+                    ) : (
+                        <p className="text-xs text-red-500 text-center">
+                            Google Sign-In is not configured.
+                        </p>
+                    )}
                 </div>
 
                 <div className="text-center pt-2">
                     <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                        Don't have an account?{" "}
-                        <Link href="/register" className="inline-flex items-center gap-0.5 font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+                        Don&apos;t have an account?{" "}
+                        <Link
+                            href="/register"
+                            className="inline-flex items-center gap-0.5 font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
+                        >
                             Register <ArrowRight size={14} />
                         </Link>
                     </p>
